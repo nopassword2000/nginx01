@@ -25,33 +25,28 @@ end
 local function wlsuffix()
 
     local wsuffix = {'html','htm','js','css','png','jpg','gif','txt' }
+    local whitelist = {"/user/login","/user/logout"}
     local uri = ngx.var.uri;
-    local arry = units.splitex(uri, '/')
+    for i=1, table.getn(whitelist) do
+        if whitelist[i] == uri then
+            return true
+        end
+        ngx.log(ngx.ERR, "whitelist" ..whitelist[i] .."---------" .. uri)
+    end
 
-    if uri == '/' then
+    local arry = units.split(uri, '/')
+    local arrySize = table.getn(arry)
+    if arrySize == 0 then
         ngx.log(ngx.ERR, "/" ..table.getn(arry) .."---------")
         return true
     end
 
-    if table.getn(arry)  <= 1 then
-        ngx.log(ngx.ERR, "table.getn----" ..table.getn(arry) .."---------")
-        return true
-    end
-
-    local charfix = nil
-    local suffixarry = string2char( arry[table.getn(arry)] )
-    for i = 1, table.getn(suffixarry) do
-        if suffixarry[i] == '.' then
-            charfix = i
-        end
-    end
-
-    if charfix == nil then
-        ngx.log(ngx.ERR, "charfix----nil---------")
+    local endifxArry = units.split(arry[table.getn(arry)], ".")
+    if table.getn(endifxArry) == 1 then
         return false
     end
 
-    local endfix = string.sub(arry[table.getn(arry)], charfix+1, -1)
+    local endfix = endifxArry[table.getn(endifxArry)]
     for  i=1, table.getn(wsuffix) do
         if wsuffix[i] == endfix then
             ngx.log(ngx.ERR, "wsuffix----" ..wsuffix[i] .."---------" .. endfix.. "-----")

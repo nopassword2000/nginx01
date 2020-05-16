@@ -75,7 +75,7 @@ local function auth()
 
     local httpc = http:new()
     httpc:set_timeout(5000)
-    local resp,err = httpc:request_uri("http://127.0.0.1:8080",
+    local resp,err = httpc:request_uri("http://192.168.222.129:8088",
         {
             method = "GET",
             path="/user/current-user",

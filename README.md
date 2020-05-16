@@ -1,0 +1,2 @@
+# nginx01
+openresty
